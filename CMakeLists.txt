@@ -200,3 +200,22 @@ target_link_libraries(tokenizers_c INTERFACE ${TOKENIZERS_RUST_LIB} ${TOKENIZERS
 
 target_link_libraries(tokenizers_cpp PRIVATE tokenizers_c sentencepiece-static ${TOKENIZERS_CPP_LINK_LIBS})
 target_include_directories(tokenizers_cpp PUBLIC ${TOKENIZERS_CPP_INCLUDE})
+
+include(GNUInstallDirs)
+install(TARGETS tokenizers_cpp sentencepiece-static
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES include/tokenizers_cpp.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${TOKENIZERS_RUST_LIB} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/tokenizers_cpp.pc.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/tokenizers_cpp.pc"
+    @ONLY
+)
+
+install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/tokenizers_cpp.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)

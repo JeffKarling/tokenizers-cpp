@@ -1,0 +1,10 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: tokenizers_cpp
+Description: C++ bindings for Hugging Face and SentencePiece tokenizers
+Version: 0.1.0
+Libs: -L${libdir} -ltokenizers_cpp -ltokenizers_c -lsentencepiece -ldl
+Cflags: -I${includedir}
