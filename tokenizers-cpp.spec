@@ -1,4 +1,5 @@
 %global __brp_add_determinism true
+%define debug_package %{nil}
 
 Name:           tokenizers-cpp
 Version:        0.1.0
