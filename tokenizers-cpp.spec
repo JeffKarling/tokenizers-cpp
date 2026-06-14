@@ -20,13 +20,6 @@ BuildRequires:  rust
 C++ bindings for Hugging Face and SentencePiece tokenizers, allowing local
 tokenization in C++ applications.
 
-%package devel
-Summary:        Development files for tokenizers-cpp
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-%description devel
-Development files for tokenizers-cpp, including static libraries and headers.
-
 %prep
 %setup -q
 sed -i '/fmacro-prefix-map/c\  add_compile_options("-fmacro-prefix-map=${CMAKE_SOURCE_DIR}/=")' sentencepiece/CMakeLists.txt
@@ -59,7 +52,7 @@ rm -rf "%{buildroot}%{_prefix}/lib/cmake"
 rm -rf "%{buildroot}%{_prefix}/lib/pkgconfig"
 rmdir "%{buildroot}%{_prefix}/lib" || true
 
-%files devel
+%files
 %{_libdir}/libtokenizers_cpp.a
 %{_libdir}/libtokenizers_c.a
 %{_libdir}/libsentencepiece.a
