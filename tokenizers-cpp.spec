@@ -3,7 +3,7 @@
 
 Name:           tokenizers-cpp
 Version:        0.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        C++ bindings for Hugging Face and SentencePiece tokenizers
 License:        Apache-2.0
 URL:            https://github.com/JeffKarling/tokenizers-cpp
@@ -33,7 +33,8 @@ export RUSTFLAGS="$RUSTFLAGS -C target-cpu=x86-64-v3"
        -DCMAKE_CXX_STANDARD=17 \
        -DCMAKE_CXX_STANDARD_REQUIRED=ON \
        -DCMAKE_CXX_FLAGS="-std=c++17 -march=x86-64-v3" \
-       -DCMAKE_C_FLAGS="-march=x86-64-v3"
+       -DCMAKE_C_FLAGS="-march=x86-64-v3" \
+       -DBUILD_SHARED_LIBS=OFF
 %cmake_build
 
 
@@ -71,6 +72,8 @@ find "%{_builddir}" -name "libabsl_*.a" -path "*/abseil-cpp/*" \
 
 
 %changelog
+* Fri Jun 19 2026 Developer <developer@example.com> - 0.1.0-3
+- Force static build of Abseil dependencies to resolve linking issues
 * Fri Jun 19 2026 Developer <developer@example.com> - 0.1.0-2
 - Install bundled abseil LTS 2026-01-07 static libs to /usr/lib64/tokenizers-cpp-absl/
   so consumers can link libsentencepiece.a without system abseil namespace conflicts
