@@ -3,7 +3,7 @@
 
 Name:           tokenizers-cpp
 Version:        0.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C++ bindings for Hugging Face and SentencePiece tokenizers
 License:        Apache-2.0
 URL:            https://github.com/JeffKarling/tokenizers-cpp
@@ -52,14 +52,27 @@ rm -rf "%{buildroot}%{_prefix}/lib/cmake"
 rm -rf "%{buildroot}%{_prefix}/lib/pkgconfig"
 rmdir "%{buildroot}%{_prefix}/lib" || true
 
+# Install bundled abseil static libs (LTS 2026-01-07) that libsentencepiece.a
+# depends on. The system abseil-cpp uses LTS 2024-07-22 with a different
+# C++ inline namespace, so it cannot resolve these symbols at link time.
+# Install to a private directory so they don't conflict with system abseil.
+ABSL_DEST="%{buildroot}%{_libdir}/tokenizers-cpp-absl"
+mkdir -p "${ABSL_DEST}"
+find "%{_builddir}" -name "libabsl_*.a" -path "*/abseil-cpp/*" \
+    -exec cp -n {} "${ABSL_DEST}/" \;
+
 %files
 %{_libdir}/libtokenizers_cpp.a
 %{_libdir}/libtokenizers_c.a
 %{_libdir}/libsentencepiece.a
 %{_includedir}/tokenizers_cpp.h
 %{_libdir}/pkgconfig/tokenizers_cpp.pc
+%{_libdir}/tokenizers-cpp-absl/
 
 
 %changelog
+* Fri Jun 19 2026 Developer <developer@example.com> - 0.1.0-2
+- Install bundled abseil LTS 2026-01-07 static libs to /usr/lib64/tokenizers-cpp-absl/
+  so consumers can link libsentencepiece.a without system abseil namespace conflicts
 * Sat Jun 13 2026 Developer <developer@example.com> - 0.1.0-1
 - Initial RPM release
